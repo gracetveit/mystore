@@ -1,4 +1,4 @@
-use actix_web::{get, HttpServer, App, web, HttpRequest, HttpResponse, Responder};
+use actix_web::{ HttpServer, App, web, HttpResponse, Responder};
 
 async fn index() -> impl Responder {
     HttpResponse::Ok().json("Hello world!")
