@@ -1,4 +1,4 @@
-use actix_web::{get, post, HttpResponse, web, };
+use actix_web::{get, post, delete, HttpResponse, web, };
 use crate::models::product::{ProductList, NewProduct, Product};
 
 
@@ -23,6 +23,15 @@ pub async fn show(id: web::Path<i32>) -> HttpResponse {
   let result = Product::find(&id);
   match result {
     Ok(product) => HttpResponse::Ok().json(product),
+    Err(e) => HttpResponse::InternalServerError().json(e.to_string())
+  }
+}
+
+#[delete("/products/{id}")]
+pub async fn delete(id: web::Path<i32>) -> HttpResponse {
+  let result = Product::destroy(&id);
+  match result {
+    Ok(_) => HttpResponse::Ok().json(()),
     Err(e) => HttpResponse::InternalServerError().json(e.to_string())
   }
 }

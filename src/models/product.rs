@@ -16,6 +16,14 @@ impl Product {
 
     products::table.find(id).first(&connection)
   }
+
+  pub fn destroy(id: &i32) -> Result<(), diesel::result::Error> {
+    use crate::schema::products::dsl;
+    let connection = establish_connection();
+
+    diesel::delete(dsl::products.find(id)).execute(&connection)?;
+    Ok(())
+  }
 }
 
 #[derive(Insertable, Deserialize)]
