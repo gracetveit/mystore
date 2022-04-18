@@ -1,5 +1,6 @@
 use actix_web::{get, post, HttpResponse, web, };
-use crate::models::product::{ProductList, NewProduct, };
+use crate::models::product::{ProductList, NewProduct, Product};
+
 
 #[get("/products")]
 pub async fn index() -> HttpResponse {
@@ -11,6 +12,15 @@ pub async fn create(new_product: web::Json<NewProduct>) -> HttpResponse {
   let result = new_product
     .create();
 
+  match result {
+    Ok(product) => HttpResponse::Ok().json(product),
+    Err(e) => HttpResponse::InternalServerError().json(e.to_string())
+  }
+}
+
+#[get("/products/{id}")]
+pub async fn show(id: web::Path<i32>) -> HttpResponse {
+  let result = Product::find(&id);
   match result {
     Ok(product) => HttpResponse::Ok().json(product),
     Err(e) => HttpResponse::InternalServerError().json(e.to_string())
